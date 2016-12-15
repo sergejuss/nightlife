@@ -12,6 +12,7 @@ module.exports = {
   yelp: function(req, res) {
     var param = {location: req.params.location}
     request_yelp(param, function(err, response, body) {
+      console.log(JSON.parse(body));
       var bars = JSON.parse(body).businesses.map(function(bar) {
         return {id: bar.id,
           name: bar.name,
