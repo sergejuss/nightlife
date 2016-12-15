@@ -19,7 +19,7 @@ module.exports = function() {
   passport.use(new TwitterStrategy({
     consumerKey: process.env.tw_key,
     consumerSecret: process.env.tw_sec,
-    callbackURL: "http://localhost:8080/auth/twitter/callback"
+    callbackURL: "https://sergejuss-nightlife.herokuapp.com/auth/twitter/callback"
   },
   function(token, tokenSecret, profile, done) {
     process.nextTick(function() {
@@ -38,7 +38,7 @@ module.exports = function() {
             }
           })
         }
-      })            
+      })
     })
   }
   ));
