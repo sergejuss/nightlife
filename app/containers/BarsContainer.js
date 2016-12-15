@@ -10,7 +10,9 @@ class BarsContainer extends React.Component {
 		this.state = {
 			isLoading: false,
       barsData: [],
-      userBars: this.props.userBars
+      userBars: this.props.userBars,
+      message: "Loading",
+      speed: 300
 			};
     this.handleGoing = this.handleGoing.bind(this);
     this.updateUserBars = this.updateUserBars.bind(this);
@@ -29,7 +31,9 @@ class BarsContainer extends React.Component {
           // console.log('localStorage loaded')
       } else {
         this.setState({
-          isLoading: true
+          isLoading: true,
+          message: "Loading",
+          speed: 300
         });
         yelp_ajax(this.props.location)
           .then(function(data) {
@@ -44,7 +48,11 @@ class BarsContainer extends React.Component {
           }.bind(this))
           .catch(function(err) {
             console.log('Error in BarsContainer: ', err);
-          })
+            this.setState({
+              message: "Sorry, no data is available for this location. Try another location.",
+              speed: 999999999
+            });
+          }.bind(this))
       }
     }
   }
@@ -94,7 +102,8 @@ class BarsContainer extends React.Component {
       )
     }.bind(this));
     return (
-      this.state.isLoading ? <Loading /> :
+      this.state.isLoading ? <Loading
+        text={this.state.message} speed={this.state.speed} /> :
       <div className="col-sm-12 text-center">
         {bars}
       </div>
