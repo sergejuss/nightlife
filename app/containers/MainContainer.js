@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
-import Head from '../components/Head';
+import Input from '../components/Input.jsx';
 import BarsContainer from './BarsContainer';
-import Footer from '../components/Footer';
+import { user_auth_ajax } from '../config/ajax';
 
 class MainContainer extends React.Component {
 
@@ -9,11 +9,30 @@ class MainContainer extends React.Component {
 		super();
 		this.state = {
 			location: '',
-      submitedLocation: ''
+      submitedLocation: '',
+      user_auth: false,
+      userBars: []
 			};
     this.handleUpdateLocation = this.handleUpdateLocation.bind(this);
     this.handleSubmitLocation = this.handleSubmitLocation.bind(this);
 	}
+
+  componentDidMount() {
+    var last_location = localStorage.getItem('last_location') ?
+      localStorage.getItem('last_location') : "";
+    user_auth_ajax(last_location)
+      .then(function(data) {
+        // console.log(data.data);
+        this.setState({
+          user_auth: data.data.user_authenticated,
+          submitedLocation: data.data.last_location,
+          userBars: data.data.user_bars
+        })
+      }.bind(this))
+      .catch(function(err) {
+        console.log('Error in MainContainer: ', err);
+      })
+  }
 
   handleUpdateLocation(e) {
     this.setState({
@@ -31,11 +50,14 @@ class MainContainer extends React.Component {
   render() {
     return (
       <div>
-        <Head location={this.state.location}
+        <Input location={this.state.location}
+          submitedLocation={this.state.submitedLocation}
           onUpdateLocation={this.handleUpdateLocation}
-          onSubmitLocation={this.handleSubmitLocation} />
-        <BarsContainer location={this.state.submitedLocation} />
-        <Footer />
+          onSubmitLocation={this.handleSubmitLocation}
+          userAuth={this.state.user_auth} />
+        <BarsContainer location={this.state.submitedLocation}
+          userAuth={this.state.user_auth}
+          userBars={this.state.userBars} />
       </div>
     )
   }

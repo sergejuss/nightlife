@@ -1,14 +1,18 @@
-'use strict';
+import Main from '../components/Main';
+import MainContainer from '../containers/MainContainer';
+import Footer from '../components/Footer';
 
-var path = require('path');
-var handlers = require('./handlers.js')
+const routes = {
+  // base component (wrapper for the whole application).
+  component: Main,
+  childRoutes: [
 
-module.exports = function(app) {
-  app.route('/')
-    .get(function(req, res) {
-      res.sendFile(path.join(__dirname, 'public', 'index.html'))
-    })
+    {
+      path: '/',
+      component: MainContainer
+    }
 
-  app.route('/api/:location')
-    .get(handlers.yelp)
-}
+  ]
+};
+
+export default routes;

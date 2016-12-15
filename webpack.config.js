@@ -1,3 +1,4 @@
+const path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
   template: __dirname + '/app/index.html',
@@ -16,8 +17,8 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /\.js$/,
-        exclude:/node_modules/,
+        test: /\.jsx?$/,
+        include: path.join(__dirname, '/app'),
         loader: 'babel-loader',
         query: {
 					presets: ['es2015', 'react']
@@ -25,5 +26,9 @@ module.exports = {
       }
     ]
   },
-  plugins: [HtmlWebpackPluginConfig]
+
+  plugins: [HtmlWebpackPluginConfig],
+
+  // start Webpack in a watch mode, so Webpack will rebuild the bundle on changes
+  watch: true
 }

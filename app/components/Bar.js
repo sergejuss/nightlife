@@ -1,19 +1,74 @@
 import React, { PropTypes } from 'react';
 import styles from '../styles';
+import GoingLoggedIn from './GoingLoggedIn.jsx';
+import GoingLoggedOut from './GoingLoggedOut.jsx';
 
-const Bar = (props) => {
+
+class Bar extends React.Component {  //remove
+  constructor() {
+		super();
+    this.transferBarData = this.transferBarData.bind(this);
+	}
+
+  transferBarData () {
+    this.props.onGoing(this);
+  }
+
+  render () {
+    return (
+      <div className="col-sm-10 col-sm-offset-1" style={styles.barRow}>
+        <div className="col-sm-2">
+          <img src={this.props.img} className='img-rounded' style={styles.img} />
+        </div>
+        <div className="col-sm-8">
+          <h3>{this.props.name}</h3>
+          <p>{this.props.location}{', phone: ' + this.props.phone}</p>
+          <p>{this.props.text}</p>
+        </div>
+        <div className="col-sm-2">
+          {this.props.userAuth ? (
+            <GoingLoggedIn onGoing={this.transferBarData} persons={this.props.persons} />
+          ) : (
+            <GoingLoggedOut persons={this.props.persons} />
+          )}
+        </div>
+      </div>
+    )
+  }
+}
+
+const Bar_temp = (props) => {
   return (
-    <div className="col-sm-10 col-sm-offset-1" style={styles.bgRed}>
-      <img src={props.img} className='img-rounded' style={styles.dispInline} />
-      <h4>{props.name}</h4>
-      <p>{props.location}</p>
-      <p>{props.text}</p>
+    <div className="col-sm-10 col-sm-offset-1" style={styles.barRow}>
+      <div className="col-sm-2">
+        <img src={props.img} className='img-rounded' style={styles.img} />
+      </div>
+      <div className="col-sm-8">
+        <h3>{props.name}</h3>
+        <p>{props.location}{', phone: ' + props.phone}</p>
+        <p>{props.text}</p>
+      </div>
+      <div className="col-sm-2">
+        {props.userAuth ? (
+          <GoingLoggedIn onGoing={props.onGoing} persons={props.persons} />
+        ) : (
+          <GoingLoggedOut persons={props.persons} />
+        )}
+      </div>
     </div>
   )
 }
 
 Bar.propTypes = {
-
+  name: PropTypes.string.isRequired,
+  img: PropTypes.string,
+  location: PropTypes.string,
+  text: PropTypes.string,
+  phone: PropTypes.string,
+  onGoing: PropTypes.func.isRequired,
+  persons: PropTypes.string,
+  userAuth: PropTypes.bool.isRequired,
+  id: PropTypes.string.isRequired
 }
 
 export default Bar
