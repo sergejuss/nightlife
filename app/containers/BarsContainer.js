@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import Bar from '../components/Bar';
 import { yelp_ajax, update_user_bars } from '../config/ajax';
 import Loading from '../components/Loading.jsx';
+import NotAvailableMessage from '../components/NotAvailableMessage.jsx'
 
 class BarsContainer extends React.Component {
 
@@ -11,8 +12,7 @@ class BarsContainer extends React.Component {
 			isLoading: false,
       barsData: [],
       userBars: this.props.userBars,
-      message: "Loading",
-      speed: 300
+      notAvailableMessage: false
 			};
     this.handleGoing = this.handleGoing.bind(this);
     this.updateUserBars = this.updateUserBars.bind(this);
@@ -32,27 +32,28 @@ class BarsContainer extends React.Component {
       } else {
         this.setState({
           isLoading: true,
-          message: "Loading",
-          speed: 300
+          notAvailableMessage: false
         });
         yelp_ajax(this.props.location)
           .then(function(data) {
             // console.log('BarsContainer= ', data.data);
-            this.setState({
-              isLoading: false,
-              barsData: data.data,
-              userBars: this.props.userBars
-            });
-            localStorage.setItem('last_location', this.props.location);
-            localStorage.setItem('bars_data', JSON.stringify(data.data));
+            if (Array.isArray(data.data)) {
+              this.setState({
+                isLoading: false,
+                barsData: data.data,
+                userBars: this.props.userBars
+              });
+              localStorage.setItem('last_location', this.props.location);
+              localStorage.setItem('bars_data', JSON.stringify(data.data));
+            } else {
+              this.setState({
+                notAvailableMessage: true
+              });
+            }
           }.bind(this))
           .catch(function(err) {
             console.log('Error in BarsContainer: ', err);
-            this.setState({
-              message: "Sorry, no data is available for this location. Try another location.",
-              speed: 999999999
-            });
-          }.bind(this))
+          })
       }
     }
   }
@@ -102,11 +103,12 @@ class BarsContainer extends React.Component {
       )
     }.bind(this));
     return (
-      this.state.isLoading ? <Loading
+      this.state.notAvailableMessage ? <NotAvailableMessage /> :
+      (this.state.isLoading ? <Loading
         text={this.state.message} speed={this.state.speed} /> :
       <div className="col-sm-12 text-center">
         {bars}
-      </div>
+      </div>)
     )
   }
 }

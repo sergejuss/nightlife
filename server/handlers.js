@@ -11,28 +11,32 @@ function get_persons(bar_id) {
 module.exports = {
   yelp: function(req, res) {
     var param = {location: req.params.location}
-    request_yelp(param, function(err, response, body) {      
-      var bars = JSON.parse(body).businesses.map(function(bar) {
-        return {id: bar.id,
-          name: bar.name,
-          img: bar.image_url,
-          location: bar.location.display_address.toString(),
-          text: bar.snippet_text,
-          phone: bar.display_phone,
-          persons: 0}
-      });
-      axios.all(bars.map(function(bar) {
-        return get_persons(bar.id);
-      }))
-      .then(function(data){
-        for (var i=0; i<bars.length; i++) {
-          bars[i].persons = data[i];
-        }
-        res.json(bars);
-      })
-      .catch(function(err) {
-        console.log("Error in handlers.yelp: ", err);
-      })
+    request_yelp(param, function(err, response, body) {
+      if (JSON.parse(body).businesses) {
+        var bars = JSON.parse(body).businesses.map(function(bar) {
+          return {id: bar.id,
+            name: bar.name,
+            img: bar.image_url,
+            location: bar.location.display_address.toString(),
+            text: bar.snippet_text,
+            phone: bar.display_phone,
+            persons: 0}
+        });
+        axios.all(bars.map(function(bar) {
+          return get_persons(bar.id);
+        }))
+        .then(function(data){
+          for (var i=0; i<bars.length; i++) {
+            bars[i].persons = data[i];
+          }
+          res.json(bars);
+        })
+        .catch(function(err) {
+          console.log("Error in handlers.yelp: ", err);
+        })
+      } else {
+        res.json({error: "Error from Yelp api"});
+      }
     })
   },
 
