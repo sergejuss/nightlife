@@ -16,7 +16,7 @@ class Bar extends React.Component {  //remove
 
   render () {
     return (
-      <div className="col-sm-10 col-sm-offset-1" style={styles.barRow}>
+      <div className="col-sm-10 col-sm-offset-1 container-fluid" style={styles.barRow}>
         <div className="col-sm-2">
           <img src={this.props.img} className='img-rounded' style={styles.img} />
         </div>
@@ -25,7 +25,7 @@ class Bar extends React.Component {  //remove
           <p>{this.props.location}{', phone: ' + this.props.phone}</p>
           <p>{this.props.text}</p>
         </div>
-        <div className="col-sm-2">
+        <div className="col-sm-2" style={styles.paddingLeftZero}>
           {this.props.userAuth ? (
             <GoingLoggedIn onGoing={this.transferBarData} persons={this.props.persons} />
           ) : (
@@ -35,28 +35,6 @@ class Bar extends React.Component {  //remove
       </div>
     )
   }
-}
-
-const Bar_temp = (props) => {
-  return (
-    <div className="col-sm-10 col-sm-offset-1" style={styles.barRow}>
-      <div className="col-sm-2">
-        <img src={props.img} className='img-rounded' style={styles.img} />
-      </div>
-      <div className="col-sm-8">
-        <h3>{props.name}</h3>
-        <p>{props.location}{', phone: ' + props.phone}</p>
-        <p>{props.text}</p>
-      </div>
-      <div className="col-sm-2">
-        {props.userAuth ? (
-          <GoingLoggedIn onGoing={props.onGoing} persons={props.persons} />
-        ) : (
-          <GoingLoggedOut persons={props.persons} />
-        )}
-      </div>
-    </div>
-  )
 }
 
 Bar.propTypes = {

@@ -3,7 +3,7 @@ import styles from '../styles';
 
 const GoingLoggedIn = (props) => {
   return (
-    <div className="col-sm-1">
+    <div className="">
       <button className="btn btn-lg" onClick={props.onGoing}
         style={styles.going}>
         {props.persons} IS GOING

@@ -15,7 +15,8 @@ var styles = {
   },
   bottom20: {
     paddingBottom: '20px',
-    marginBottom: '0px'
+    marginBottom: '0px',
+    backgroundColor: '#FFF'
   },
   img: {
     maxHeight: '100px',
@@ -25,6 +26,9 @@ var styles = {
   going: {
     marginTop: '40px',
     marginBottom: '40px'
+  },
+  paddingLeftZero: {
+    paddingLeft: '0px'
   }
 }
 

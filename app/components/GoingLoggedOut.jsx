@@ -4,13 +4,13 @@ import styles from '../styles';
 const GoingLoggedOut = (props) => {
   return (
     <a href="/auth/twitter">
-      <div className="col-sm-1">
+      <div className="">
         <button className="btn btn-lg"
           style={styles.going}>
           {props.persons} IS GOING
         </button>
       </div>
-    </a>    
+    </a>
   )
 }
 
